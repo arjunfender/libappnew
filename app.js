@@ -1,24 +1,11 @@
 
-//****creating server usign the express code */
-const express = require('express');
-const chalk = require('chalk');
-const path = require('path');
-const bodyparser = require('body-parser')
+const express = require('express');//****creating server usign the express code */
+const chalk = require('chalk');//***requring chalk module */
+const path = require('path');//****require path */
+const bodyparser = require('body-parser')//*****requiring body parser* */
 const cors = require('cors');
-//***requring chalk module */
-
-
-//****require path */
-
-
-
-//*****requiring body parser* */
-
 var app = new express();// creating a consructor for the obect for express newwly created
-
-
-//****for books page****/
-var nav =[
+var nav =[                      //****for books page****/
     {link:'/', title:'HOME'},
     {link:'/login', title:'Login'},
     {link:'/signup', title:'Sign-Up'},
@@ -31,19 +18,21 @@ var nav =[
 //****creating path to new folder for books */ 
 const booksRouter = require('./src/routes/bookRoutes')(nav);// &passing nav to book router
 const authorsRouter = require('./src/routes/authorRoutes')(nav);
+const signupRouter = require('./src/routes/signupRouter')(nav);
+const loginRouter = require('./src/routes/loginRouter')(nav);
+
 
 app.use(express.static(path.join(__dirname,"/public")));// to receive css file from the public folder
 app.use(bodyparser.json());
 app.use(cors());
 app.use(bodyparser.urlencoded({extended : true}));
-///******creating routers using express */
-app.use('/books',booksRouter);
+app.use('/books',booksRouter);  ///******creating routers using express */
 app.use('/authors',authorsRouter);
+app.use('/signup', signupRouter);
+app.use('/login',loginRouter);
 
 
-
-//changing view engine html to Ejs format ,in Rendering format into app set,and app get
-app.set('views','./src/views');
+app.set('views','./src/views');//changing view engine html to Ejs format ,in Rendering format into app set,and app get
 app.set('view engine','ejs');
 
 
@@ -53,8 +42,8 @@ app.set('view engine','ejs');
 //***for index page */
 app.get('/', function(req,res){
     res.render('index',
-    ///*****changing navigational bar from HTML to Ejs */
-    {nav,title:"Library"
+    
+    {nav,title:"Library"        //*****changing navigational bar from HTML to Ejs */
     });                        //render is using instead of sendFile in the above code and passing the data through a Jsonn obeject
 });
 
